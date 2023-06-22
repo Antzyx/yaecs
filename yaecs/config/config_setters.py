@@ -76,8 +76,9 @@ class ConfigSettersMixin:
         set_name = param_name
         while set_name in current_processing or set_name in current_added_processing:
             set_name = set_name + " "
-        if not any(v.__name__ == function_to_add.__name__ for k, v in current_added_processing.items()
-                   if k == set_name):
+        if not any(v == function_to_add if isinstance(function_to_add, str) else v.__name__ == function_to_add.__name__
+                   for k, v in current_added_processing.items()
+                   if set_name in (k + " ", k)):
             # Add to main config
             self._main_config.add_processing_function(param_name, function_to_add, processing_type)
             # Add to current sub-configs
